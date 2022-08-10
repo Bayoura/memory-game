@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardGrid from "./components/CardGrid";
 import { v4 as uuidv4 } from "uuid";
 
@@ -37,6 +37,43 @@ function App() {
 
   const [game, setGame] = useState(newGame);
 
+  // invoke shuffle when the component mounts
+  useEffect(() => {
+    shuffle();
+  }, []);
+
+  useEffect(() => {
+    if (game.currentScore > game.highScore) {
+      console.log(
+        `Is ${game.currentScore} bigger than ${game.highScore}??`,
+        game.currentScore > game.highScore
+      );
+      setGame((current) => {
+        return {
+          ...current,
+          highScore: game.currentScore,
+        };
+      });
+    }
+  }, [game.currentScore, game.highScore]);
+
+  function checkClick(id) {
+    const newCards = [...game.cards];
+    const card = newCards.find((card) => card.id === id);
+    if (card.clicked === true) {
+      gameOver();
+    } else {
+      card.clicked = true;
+      setGame((current) => {
+        return {
+          ...current,
+          cards: newCards,
+          currentScore: game.currentScore + 1,
+        };
+      });
+    }
+  }
+
   //fisher-yates shuffle
   function shuffle() {
     const newCards = [...game.cards];
@@ -53,13 +90,28 @@ function App() {
     });
   }
 
+  function gameOver() {
+    alert("Game Over!");
+    const newCards = [...game.cards];
+    newCards.map((card) => (card.clicked = false));
+    setGame((current) => {
+      return { ...current, cards: newCards, currentScore: 0 };
+    });
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Memory Game</h1>
       </header>
       <div>
-        <CardGrid cards={game.cards} shuffle={shuffle} />
+        <p>Score: {game.currentScore}</p>
+        <p>High Score: {game.highScore}</p>
+        <CardGrid
+          cards={game.cards}
+          shuffle={shuffle}
+          checkClick={checkClick}
+        />
       </div>
     </div>
   );
