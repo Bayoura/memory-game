@@ -1,74 +1,73 @@
 import React, { useEffect, useState } from "react";
-import CardGrid from "./components/CardGrid";
+import PokemonGrid from "./components/PokemonGrid";
 import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
 function App() {
-  const newGame = {
-    cards: [
-      {
-        name: "1",
-        id: uuidv4(),
-        clicked: false,
-      },
-      {
-        name: "2",
-        id: uuidv4(),
-        clicked: false,
-      },
-      {
-        name: "3",
-        id: uuidv4(),
-        clicked: false,
-      },
-      {
-        name: "4",
-        id: uuidv4(),
-        clicked: false,
-      },
-      {
-        name: "5",
-        id: uuidv4(),
-        clicked: false,
-      },
-    ],
-    currentScore: 0,
-    highScore: 0,
-  };
+  const [score, setScore] = useState({ currentScore: 0, highScore: 0 });
+  const [pokemon, setPokemon] = useState([]);
 
-  const [game, setGame] = useState(newGame);
-
-  // invoke shuffle when the component mounts
+  // get random pokemon list and invoke shuffle when the component mounts
   useEffect(() => {
+    fetchPokemon();
     shuffle();
   }, []);
 
-  useEffect(() => {
-    if (game.currentScore > game.highScore) {
-      console.log(
-        `Is ${game.currentScore} bigger than ${game.highScore}??`,
-        game.currentScore > game.highScore
+  const fetchPokemon = async () => {
+    const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const poke = await res.json();
+    const allPokemon = poke.results;
+    const randPokemon = [];
+    for (let i = 0; i < 20; i++) {
+      randPokemon.push(
+        allPokemon.splice(Math.floor(Math.random() * allPokemon.length), 1)
       );
-      setGame((current) => {
+    }
+
+    getPokemon(randPokemon);
+  };
+
+  const getPokemon = async (randPokemon) => {
+    const pokeList = [];
+    for (let i = 0; i < randPokemon.length; i++) {
+      const pokemonUrl = randPokemon[i][0].url;
+      const response = await fetch(pokemonUrl);
+      const pokemon = await response.json();
+      const id = pokemon.id;
+      const name = pokemon.name;
+      const sprite = pokemon.sprites.front_default;
+      pokeList.push({ id, name, sprite });
+    }
+    setPokemon(pokeList);
+  };
+
+  useEffect(() => {
+    if (score.currentScore > score.highScore) {
+      console.log(
+        `Is ${score.currentScore} bigger than ${score.highScore}??`,
+        score.currentScore > score.highScore
+      );
+      setScore((current) => {
         return {
           ...current,
-          highScore: game.currentScore,
+          highScore: score.currentScore,
         };
       });
     }
-  }, [game.currentScore, game.highScore]);
+  }, [score]);
 
   function checkClick(id) {
-    const newCards = [...game.cards];
-    const card = newCards.find((card) => card.id === id);
-    if (card.clicked === true) {
+    const pokeList = [...pokemon];
+    const target = pokeList.find((p) => p.id === id);
+    if (target.clicked === true) {
       gameOver();
     } else {
-      card.clicked = true;
-      setGame((current) => {
+      target.clicked = true;
+      setPokemon(pokeList);
+      setScore((current) => {
         return {
           ...current,
-          cards: newCards,
-          currentScore: game.currentScore + 1,
+          currentScore: score.currentScore + 1,
         };
       });
     }
@@ -76,26 +75,25 @@ function App() {
 
   //fisher-yates shuffle
   function shuffle() {
-    const newCards = [...game.cards];
-    for (let i = newCards.length - 1; i > 0; i--) {
+    const pokeList = [...pokemon];
+    for (let i = pokeList.length - 1; i > 0; i--) {
       let j = Math.floor(Math.random() * (i + 1)); // random index from 0 to i
 
-      [newCards[i], newCards[j]] = [newCards[j], newCards[i]];
+      [pokeList[i], pokeList[j]] = [pokeList[j], pokeList[i]];
     }
-    setGame((current) => {
-      return {
-        ...current,
-        cards: newCards,
-      };
-    });
+    setPokemon(pokeList);
   }
 
   function gameOver() {
     alert("Game Over!");
-    const newCards = [...game.cards];
-    newCards.map((card) => (card.clicked = false));
-    setGame((current) => {
-      return { ...current, cards: newCards, currentScore: 0 };
+    const pokeList = [...pokemon];
+    pokeList.map((p) => (p.clicked = false));
+    setPokemon(pokeList);
+    setScore((current) => {
+      return {
+        ...current,
+        currentScore: 0,
+      };
     });
   }
 
@@ -105,10 +103,10 @@ function App() {
         <h1>Memory Game</h1>
       </header>
       <div>
-        <p>Score: {game.currentScore}</p>
-        <p>High Score: {game.highScore}</p>
-        <CardGrid
-          cards={game.cards}
+        <p>Score: {score.currentScore}</p>
+        <p>High Score: {score.highScore}</p>
+        <PokemonGrid
+          pokemon={pokemon}
           shuffle={shuffle}
           checkClick={checkClick}
         />
