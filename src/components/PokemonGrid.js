@@ -2,9 +2,8 @@ import Pokemon from "./Pokemon";
 
 function PokemonGrid({ pokemon, shuffle, checkClick }) {
   return (
-    <div>
+    <div className="pokemon-grid">
       {pokemon.map((p) => {
-        console.log(p);
         return (
           <Pokemon
             key={p.id}
