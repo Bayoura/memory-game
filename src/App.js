@@ -4,9 +4,11 @@ import PokemonGrid from "./components/PokemonGrid";
 function App() {
   const [score, setScore] = useState({ currentScore: 0, highScore: 0 });
   const [pokemon, setPokemon] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // get random pokemon list and invoke shuffle when the component mounts
   useEffect(() => {
+    setLoading(true);
     fetchPokemon();
     shuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,6 +40,7 @@ function App() {
       pokeList.push({ id, name, sprite });
     }
     setPokemon(pokeList);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -93,19 +96,24 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className="app">
+      <header className="app-header">
         <h1>PokéMemory</h1>
       </header>
-      <div>
+      <div className="explanation">Click each Pokémon only once!</div>
+      <div className="score-container">
         <p>Score: {score.currentScore}</p>
         <p>High Score: {score.highScore}</p>
       </div>
-      <PokemonGrid
-        pokemon={pokemon}
-        shuffle={shuffle}
-        checkClick={checkClick}
-      />
+      {loading ? (
+        <p className="loading">Loading...</p>
+      ) : (
+        <PokemonGrid
+          pokemon={pokemon}
+          shuffle={shuffle}
+          checkClick={checkClick}
+        />
+      )}
     </div>
   );
 }
