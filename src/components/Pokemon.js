@@ -6,8 +6,10 @@ function Pokemon({ pokemon, name, sprite, shuffle, checkClick }) {
 
   return (
     <div onClick={handleClick}>
-      <img src={sprite} alt={name} />
-      <p>{name}</p>
+      <div className="pokemon-card">
+        <img src={sprite} alt={name} />
+        <p>{name}</p>
+      </div>
     </div>
   );
 }
