@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/memory-game/static/css/main.f0373bce.css",
+    "main.js": "/memory-game/static/js/main.084b339d.js",
+    "static/media/Pokemon-Hollow.ttf": "/memory-game/static/media/Pokemon-Hollow.47f77ce9939c5330492b.ttf",
+    "static/media/Pokemon-Solid.ttf": "/memory-game/static/media/Pokemon-Solid.5d60be1f7ff5fcc21fc1.ttf",
+    "static/media/PokemonGb-Regular.ttf": "/memory-game/static/media/PokemonGb-Regular.6211ee48ea626f34681e.ttf",
+    "index.html": "/memory-game/index.html",
+    "main.f0373bce.css.map": "/memory-game/static/css/main.f0373bce.css.map",
+    "main.084b339d.js.map": "/memory-game/static/js/main.084b339d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0373bce.css",
+    "static/js/main.084b339d.js"
+  ]
+}
