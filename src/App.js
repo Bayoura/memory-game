@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import PokemonGrid from "./components/PokemonGrid";
-import { v4 as uuidv4 } from "uuid";
-import axios from "axios";
 
 function App() {
   const [score, setScore] = useState({ currentScore: 0, highScore: 0 });
@@ -11,6 +9,7 @@ function App() {
   useEffect(() => {
     fetchPokemon();
     shuffle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchPokemon = async () => {
@@ -34,7 +33,7 @@ function App() {
       const response = await fetch(pokemonUrl);
       const pokemon = await response.json();
       const id = pokemon.id;
-      const name = pokemon.name;
+      const name = pokemon.name[0].toUpperCase() + pokemon.name.substring(1);
       const sprite = pokemon.sprites.front_default;
       pokeList.push({ id, name, sprite });
     }
@@ -43,10 +42,6 @@ function App() {
 
   useEffect(() => {
     if (score.currentScore > score.highScore) {
-      console.log(
-        `Is ${score.currentScore} bigger than ${score.highScore}??`,
-        score.currentScore > score.highScore
-      );
       setScore((current) => {
         return {
           ...current,
@@ -100,17 +95,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Memory Game</h1>
+        <h1>PokéMemory</h1>
       </header>
       <div>
         <p>Score: {score.currentScore}</p>
         <p>High Score: {score.highScore}</p>
-        <PokemonGrid
-          pokemon={pokemon}
-          shuffle={shuffle}
-          checkClick={checkClick}
-        />
       </div>
+      <PokemonGrid
+        pokemon={pokemon}
+        shuffle={shuffle}
+        checkClick={checkClick}
+      />
     </div>
   );
 }
