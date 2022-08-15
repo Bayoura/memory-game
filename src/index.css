@@ -31,6 +31,11 @@ body {
   align-items: center;
 }
 
+header {
+  text-align: center;
+  margin: 0 10px;
+}
+
 
 h1 {
   color: hsl(0, 100%, 40%);
@@ -50,10 +55,9 @@ h1 {
 
 .score-container {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   gap: 10px;
   margin: 40px 0 20px 0;
-  width: 100%
 }
 
 .score-container > p {
@@ -98,4 +102,21 @@ h1 {
 
 .pokemon-grid > div > img {
   width: 100px;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  .explanation {
+    font-size: 1rem;
+  }
+  .score-container {
+    flex-direction: column;
+  }
+
+  .pokemon-grid {
+    grid-template-columns: repeat(auto-fit,minmax(140px,160px));
+  }
 }
