@@ -6,14 +6,14 @@ function App() {
   const [pokemon, setPokemon] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // get random pokemon list and invoke shuffle when the component mounts
+  // get pokemon list when the component mounts
   useEffect(() => {
     setLoading(true);
     fetchPokemon();
-    shuffle();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // get list composed of 20 random pokemon out of the first 151 pokemon
   const fetchPokemon = async () => {
     const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
     const poke = await res.json();
@@ -28,6 +28,7 @@ function App() {
     getPokemon(randPokemon);
   };
 
+  // get more info on each of the 20 pokemon
   const getPokemon = async (randPokemon) => {
     const pokeList = [];
     for (let i = 0; i < randPokemon.length; i++) {
@@ -43,6 +44,7 @@ function App() {
     setLoading(false);
   };
 
+  // update high score
   useEffect(() => {
     if (score.currentScore > score.highScore) {
       setScore((current) => {
@@ -54,6 +56,17 @@ function App() {
     }
   }, [score]);
 
+  // check if player won the game
+  useEffect(() => {
+    if (score.highScore === 20) {
+      setLoading(true);
+      newGame();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [score.highScore]);
+
+  // check if player clicked a pokemon twice
+  // otherwise update score
   function checkClick(id) {
     const pokeList = [...pokemon];
     const target = pokeList.find((p) => p.id === id);
@@ -82,6 +95,17 @@ function App() {
     setPokemon(pokeList);
   }
 
+  function newGame() {
+    alert("Congrats! You have won! Are you up for another round?");
+    fetchPokemon();
+    setScore(() => {
+      return {
+        currentScore: 0,
+        highScore: 0,
+      };
+    });
+  }
+
   function gameOver() {
     alert("Game Over!");
     const pokeList = [...pokemon];
@@ -97,14 +121,16 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
+      <header>
         <h1>PokéMemory</h1>
+        <div>
+          <div className="explanation">Click each Pokémon only once!</div>
+          <div className="score-container">
+            <p>Score: {score.currentScore}</p>
+            <p>High Score: {score.highScore}</p>
+          </div>
+        </div>
       </header>
-      <div className="explanation">Click each Pokémon only once!</div>
-      <div className="score-container">
-        <p>Score: {score.currentScore}</p>
-        <p>High Score: {score.highScore}</p>
-      </div>
       {loading ? (
         <p className="loading">Loading...</p>
       ) : (
@@ -114,6 +140,10 @@ function App() {
           checkClick={checkClick}
         />
       )}
+      <footer>
+        <div>Mady by Bayoura</div>
+        <div>Odinproject</div>
+      </footer>
     </div>
   );
 }
