@@ -24,17 +24,17 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* this makes sure the footer sticks to the bottom */
 .app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
 }
 
 header {
   text-align: center;
   margin: 0 10px;
 }
-
 
 h1 {
   color: hsl(0, 100%, 40%);
@@ -45,6 +45,7 @@ h1 {
 .loading {
   margin-top: 100px;
   font-size: 2rem;
+  text-align: center;
 }
 
 .explanation {
@@ -54,7 +55,7 @@ h1 {
 
 .score-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   gap: 10px;
   margin: 40px 0 20px 0;
 }
@@ -101,6 +102,12 @@ h1 {
 
 .pokemon-grid > div > img {
   width: 100px;
+}
+
+footer {
+  font-size: 0.8rem;
+  margin-top: 20px;
+  text-align: center;
 }
 
 @media (max-width: 600px) {
