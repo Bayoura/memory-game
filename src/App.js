@@ -141,8 +141,21 @@ function App() {
         />
       )}
       <footer>
-        <div>Mady by Bayoura</div>
-        <div>Odinproject</div>
+        <div>
+          Made by{" "}
+          <a href="https://github.com/Bayoura" target="_blank" rel="noreferrer">
+            Bayoura
+          </a>
+          {" | "}
+          <a
+            href="https://www.theodinproject.com"
+            target="_blank"
+            rel="noreferrer"
+          >
+            The Odin Project
+          </a>
+        </div>
+        <div></div>
       </footer>
     </div>
   );
