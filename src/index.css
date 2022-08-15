@@ -18,9 +18,8 @@
   box-sizing: border-box;
 }
 
-
 body {
-  font-family: "PokemonGB";
+  font-family: "PokemonGB", "Courier New", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -39,7 +38,7 @@ header {
 
 h1 {
   color: hsl(0, 100%, 40%);
-  font-family: 'Pokemon-Hollow';
+  font-family: "Pokemon-Hollow", 'Trebuchet MS', sans-serif;
   font-size: 3.5rem;
 }
 
